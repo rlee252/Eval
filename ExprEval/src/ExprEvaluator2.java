@@ -136,7 +136,7 @@ private double formNum()
   double total = 0.0;
   int countAfterDec = 0;
   boolean isDecimal = false;
-  boolean isNegative = false;
+  boolean isNegative = true;
   double mult = 1.0;
   char currentDigitToken, d;
   do

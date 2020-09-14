@@ -20,11 +20,11 @@ public static void expressionOutput(double x)
                                  //display without decimal point
   {
      int intAns = (int)x;
-     System.out.println("value = " + intAns + '\n');
+     System.out.print("value = " + intAns);
   }
   else
   {
-     System.out.println("value = " + x + '\n');
+     System.out.print("value = " + x);
   }
 }
 
@@ -38,8 +38,13 @@ performing the operation and adding the result onto B as a double value.*/
 private static void eval()
 {
     char op = operatorQueue.remove(); //current operator
+    double opnd2 = 0;
     double opnd1 = digitQueue.remove(); //operands numbers
-    double opnd2 = digitQueue.remove();
+
+    if(op != '_') {
+    	opnd2 = digitQueue.remove();
+    }
+    
     double val = 0.0;
     switch (op) //evaluate
     {
@@ -55,6 +60,13 @@ private static void eval()
       case '/':
         val = opnd2/opnd1;
         break;
+      case '^':
+    	  val = Math.pow(opnd2, opnd1);
+    	break;
+      case '_':
+    	  val= opnd1 * -1;
+    	  break;
+      
     }
     digitQueue.addFirst(val); //add result onto B
 }
@@ -66,10 +78,10 @@ the left parenthesis is also removed from A*/
 
 private static void evalDown()
 {
-  do
-  {
-    eval();
-  }while((operatorQueue.size()>0) && (operatorQueue.peek() != '('));
+  
+  while((operatorQueue.size()>0) && (operatorQueue.peek() != '(')){
+	    eval();
+  }
   if((operatorQueue.size()>0) && (operatorQueue.peek() == '('))
   {
     operatorQueue.remove();
@@ -136,7 +148,7 @@ private double formNum()
   double total = 0.0;
   int countAfterDec = 0;
   boolean isDecimal = false;
-  boolean isNegative = false;
+ // boolean isNegative = false;
   double mult = 1.0;
   char currentDigitToken, d;
   do
@@ -163,14 +175,15 @@ private double formNum()
           countAfterDec++;
         }
       }
-      else
+      /*else
       {
         if(currentDigitToken == '_') 
         {
           isNegative = true;
-          // removed this doesn't make any sense since the negavite sign comes first. total = -total; //an underscore character represents a negative value  
+         
         }
       }
+      */
     }
     counter++; //Prepare to move to the next character to the right. 
          //This is a private non-static method because it changes the member variable p
@@ -185,10 +198,10 @@ private double formNum()
    total = total/Math.pow(10.0,(countAfterDec)*1.0); //compute the value taking into account
                                            //the number of decimal places
   }
-  if(isNegative) 
+  /*if(isNegative) 
   {
     total = total * -1;
-  }
+  }*/
   return total;
 }
 
@@ -199,8 +212,12 @@ private double formNum()
 //as in formNum(); here we (unnecessarily) execute each if statement.
 public double evaluator() 
 {
-
+  boolean powerFlag = false;
+  int powerFlagPar = 0;
+  int parenFlag = 0;
   char tempCharacterToken; //current token in the input expression
+  boolean negFlag = false;
+  int negFlagPar = 0;
 
   //loop to scan the string right to left
   do
@@ -209,7 +226,8 @@ public double evaluator()
     if(tempCharacterToken == '(')
     {
         operatorQueue.addFirst(tempCharacterToken); //always push a left parenthesis to delimit a subexpression
-        counter++;      
+        counter++;  
+        parenFlag++;
     }
     
     //if the token is a right parenthesis, 
@@ -218,6 +236,15 @@ public double evaluator()
     {
       evalDown();
       counter++; //move beyond the right parenthesis
+      parenFlag--;
+      if(negFlag && parenFlag == negFlagPar) {
+    	  eval();
+    	  negFlag = false;
+      }
+      if(powerFlag && parenFlag == powerFlagPar) {
+   	   eval();
+   	   powerFlag = false;
+      }
     }
 
 
@@ -240,9 +267,30 @@ public double evaluator()
     
     //if the token is the rightmost  digit of a number or a decimal point on the right,
     //form the number as a double and push onto stack B
-    else if(((tempCharacterToken<='9')&&(tempCharacterToken>='0'))||(tempCharacterToken=='.')||(tempCharacterToken=='_'))
+    else if(((tempCharacterToken<='9')&&(tempCharacterToken>='0'))||(tempCharacterToken=='.') /* ||(tempCharacterToken=='_')*/)
     {   
        digitQueue.addFirst(formNum());
+       if(negFlag && parenFlag == negFlagPar) {
+     	  eval();
+     	  negFlag = false;
+       }
+       if(powerFlag && parenFlag == powerFlagPar) {
+    	   eval();
+    	   powerFlag = false;
+       }
+    }
+    else if(tempCharacterToken == '^') {
+    	powerFlag = true; 
+    	operatorQueue.addFirst(tempCharacterToken);
+    	counter++;
+    	powerFlagPar = parenFlag;
+    }
+    else if(tempCharacterToken == '_') {
+    	negFlag = true; 
+    	operatorQueue.addFirst(tempCharacterToken);
+    	counter++;
+    	negFlagPar = parenFlag;
+
     }
     else {
       counter++;

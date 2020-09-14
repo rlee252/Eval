@@ -27,10 +27,10 @@ public class ExprEvaluatorTest2
     ExprEvaluator2 expr8 = new ExprEvaluator2("4+3*(1+2.*(6/(3+3.))-1)+2.0"); 
     ExprEvaluator2 expr9 = new ExprEvaluator2("0.1*0.2"); 
     ExprEvaluator2 expr10 = new ExprEvaluator2("0.011*.022"); 
-    ExprEvaluator2 expr11 = new ExprEvaluator2("_(2-(_1))"); 
-    //ExprEvaluator2 expr13 = new ExprEvaluator2("3.1415927^2"); 
-    //ExprEvaluator2 expr14 = new ExprEvaluator2("2^(2*(2+3))"); 
-    //ExprEvaluator2 expr15 = new ExprEvaluator2("(-3)^(-(3))"); 
+//    ExprEvaluator2 expr11 = new ExprEvaluator2("_(2-(_1))"); 
+//    ExprEvaluator2 expr13 = new ExprEvaluator2("3.1415927^2"); 
+//    ExprEvaluator2 expr14 = new ExprEvaluator2("2^(2*(2+3))"); 
+//    ExprEvaluator2 expr15 = new ExprEvaluator2("(_3)^(_(3))"); 
      
 
     // 1) 2 - (-7) = 9
@@ -42,26 +42,56 @@ public class ExprEvaluatorTest2
    
     //display the input for expr1
     // System.out.println(expr1.getExpression() + '\n');
-
+    
+    System.out.println("(3.+4*(1+2*(4+3*(2-_7)))-1)/2.0");
     expr3.evaluator(); //evaluate expr1
     System.out.println(" :should be 127"); 
+  
+    System.out.println("1+2*3+4");
     expr4.evaluator(); //evaluate expr1
     System.out.println(" :should be 11"); 
+    
+    
+    System.out.println("1 + 2 * 3 + 4");
     expr5.evaluator(); //evaluate expr1
-    System.out.println(" :should be 11"); 
+    System.out.println(" :should be 11");
+    
+    System.out.println("1+9/3-4");
     expr6.evaluator(); //evaluate expr1
     System.out.println(" :should be 0"); 
+    
+    System.out.println("121.75 + 3.25");
     expr7.evaluator(); //evaluate expr1
     System.out.println(" :should be 125"); 
+    
+    System.out.println("4+3*(1+2.*(6/(3+3.))-1)+2.0");
     expr8.evaluator(); //evaluate expr1
     System.out.println(" :should be 12"); 
+    
+    System.out.println("0.1*0.2");
     expr9.evaluator(); //evaluate expr1
     System.out.println(" :should be .02"); 
+    
+    System.out.println("0.011*.022");
     expr10.evaluator(); //evaluate expr1
     System.out.println(" :should be .000242"); 
-    expr11.evaluator(); //evaluate expr1
-    System.out.println(" :should be -3"); 
-
+//    
+//    System.out.println("_(2-(_1))");
+//    expr11.evaluator();
+//    System.out.println(" :should be -3");
+//    
+//    System.out.println("3.1415927^2");
+//    expr13.evaluator();
+//    System.out.println(" :should be 9.87");
+//    
+//    System.out.println("2^(2*(2+3))");
+//    expr14.evaluator();
+//    System.out.println(" :should be 1024");
+//    
+//    System.out.println("(_3)^(_(3))");
+//    expr15.evaluator();
+//    System.out.println(" :should be -1/27");
+//    
     // expr2.evaluator(); //evaluate expr1
   //  expr2.evaluator(); //evaluate expr2; the result will appear as an int value
 
